@@ -22,6 +22,9 @@
 		D22DD80F272BF03E00689F71 /* SquadName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD80E272BF03E00689F71 /* SquadName.swift */; };
 		D22DD812272BFE7600689F71 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD811272BFE7600689F71 /* City.swift */; };
 		D22DD814272C004100689F71 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD813272C004100689F71 /* Response.swift */; };
+		D2787B85272C027400A732FD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2787B84272C027400A732FD /* NetworkService.swift */; };
+		D2787B87272C04AE00A732FD /* NetworkEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2787B86272C04AE00A732FD /* NetworkEndpoint.swift */; };
+		D2787B89272C097F00A732FD /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2787B88272C097F00A732FD /* NetworkModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +67,9 @@
 		D22DD80E272BF03E00689F71 /* SquadName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadName.swift; sourceTree = "<group>"; };
 		D22DD811272BFE7600689F71 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		D22DD813272C004100689F71 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		D2787B84272C027400A732FD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		D2787B86272C04AE00A732FD /* NetworkEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkEndpoint.swift; sourceTree = "<group>"; };
+		D2787B88272C097F00A732FD /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +177,9 @@
 		D22DD815272C019A00689F71 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				D2787B86272C04AE00A732FD /* NetworkEndpoint.swift */,
+				D2787B88272C097F00A732FD /* NetworkModel.swift */,
+				D2787B84272C027400A732FD /* NetworkService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -307,6 +316,7 @@
 				D22DD803272BE6FE00689F71 /* Squad.swift in Sources */,
 				D22DD80F272BF03E00689F71 /* SquadName.swift in Sources */,
 				D22DD7D3272BE59500689F71 /* ViewController.swift in Sources */,
+				D2787B87272C04AE00A732FD /* NetworkEndpoint.swift in Sources */,
 				D22DD7D1272BE59500689F71 /* AppDelegate.swift in Sources */,
 				D22DD809272BE82400689F71 /* Power.swift in Sources */,
 				D22DD806272BE77C00689F71 /* SquadGenerator.swift in Sources */,
@@ -314,6 +324,8 @@
 				D22DD814272C004100689F71 /* Response.swift in Sources */,
 				D22DD80B272BEA1A00689F71 /* Name.swift in Sources */,
 				D22DD801272BE6EE00689F71 /* SquadMember.swift in Sources */,
+				D2787B85272C027400A732FD /* NetworkService.swift in Sources */,
+				D2787B89272C097F00A732FD /* NetworkModel.swift in Sources */,
 				D22DD80D272BEF4B00689F71 /* Nickname.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
