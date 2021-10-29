@@ -13,6 +13,15 @@
 		D22DD7D8272BE59600689F71 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D22DD7D6272BE59600689F71 /* Main.storyboard */; };
 		D22DD7E4272BE59600689F71 /* Paw_TestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD7E3272BE59600689F71 /* Paw_TestTests.swift */; };
 		D22DD7EF272BE59600689F71 /* Paw_TestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD7EE272BE59600689F71 /* Paw_TestUITests.swift */; };
+		D22DD801272BE6EE00689F71 /* SquadMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD800272BE6EE00689F71 /* SquadMember.swift */; };
+		D22DD803272BE6FE00689F71 /* Squad.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD802272BE6FE00689F71 /* Squad.swift */; };
+		D22DD806272BE77C00689F71 /* SquadGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD805272BE77C00689F71 /* SquadGenerator.swift */; };
+		D22DD809272BE82400689F71 /* Power.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD808272BE82400689F71 /* Power.swift */; };
+		D22DD80B272BEA1A00689F71 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD80A272BEA1A00689F71 /* Name.swift */; };
+		D22DD80D272BEF4B00689F71 /* Nickname.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD80C272BEF4B00689F71 /* Nickname.swift */; };
+		D22DD80F272BF03E00689F71 /* SquadName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD80E272BF03E00689F71 /* SquadName.swift */; };
+		D22DD812272BFE7600689F71 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD811272BFE7600689F71 /* City.swift */; };
+		D22DD814272C004100689F71 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DD813272C004100689F71 /* Response.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +55,15 @@
 		D22DD7EA272BE59600689F71 /* Paw TestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Paw TestUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D22DD7EE272BE59600689F71 /* Paw_TestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paw_TestUITests.swift; sourceTree = "<group>"; };
 		D22DD7F0272BE59600689F71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D22DD800272BE6EE00689F71 /* SquadMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadMember.swift; sourceTree = "<group>"; };
+		D22DD802272BE6FE00689F71 /* Squad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Squad.swift; sourceTree = "<group>"; };
+		D22DD805272BE77C00689F71 /* SquadGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadGenerator.swift; sourceTree = "<group>"; };
+		D22DD808272BE82400689F71 /* Power.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Power.swift; sourceTree = "<group>"; };
+		D22DD80A272BEA1A00689F71 /* Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Name.swift; sourceTree = "<group>"; };
+		D22DD80C272BEF4B00689F71 /* Nickname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nickname.swift; sourceTree = "<group>"; };
+		D22DD80E272BF03E00689F71 /* SquadName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadName.swift; sourceTree = "<group>"; };
+		D22DD811272BFE7600689F71 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
+		D22DD813272C004100689F71 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +114,9 @@
 		D22DD7CF272BE59500689F71 /* Paw Test */ = {
 			isa = PBXGroup;
 			children = (
+				D22DD807272BE80C00689F71 /* TestData */,
+				D22DD7FF272BE6D900689F71 /* Model */,
+				D22DD815272C019A00689F71 /* Network */,
 				D22DD7D0272BE59500689F71 /* AppDelegate.swift */,
 				D22DD7D2272BE59500689F71 /* ViewController.swift */,
 				D22DD7D4272BE59600689F71 /* Assets.xcassets */,
@@ -122,6 +143,36 @@
 				D22DD7F0272BE59600689F71 /* Info.plist */,
 			);
 			path = "Paw TestUITests";
+			sourceTree = "<group>";
+		};
+		D22DD7FF272BE6D900689F71 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D22DD802272BE6FE00689F71 /* Squad.swift */,
+				D22DD800272BE6EE00689F71 /* SquadMember.swift */,
+				D22DD805272BE77C00689F71 /* SquadGenerator.swift */,
+				D22DD813272C004100689F71 /* Response.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D22DD807272BE80C00689F71 /* TestData */ = {
+			isa = PBXGroup;
+			children = (
+				D22DD80A272BEA1A00689F71 /* Name.swift */,
+				D22DD811272BFE7600689F71 /* City.swift */,
+				D22DD80C272BEF4B00689F71 /* Nickname.swift */,
+				D22DD808272BE82400689F71 /* Power.swift */,
+				D22DD80E272BF03E00689F71 /* SquadName.swift */,
+			);
+			path = TestData;
+			sourceTree = "<group>";
+		};
+		D22DD815272C019A00689F71 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,8 +304,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D22DD803272BE6FE00689F71 /* Squad.swift in Sources */,
+				D22DD80F272BF03E00689F71 /* SquadName.swift in Sources */,
 				D22DD7D3272BE59500689F71 /* ViewController.swift in Sources */,
 				D22DD7D1272BE59500689F71 /* AppDelegate.swift in Sources */,
+				D22DD809272BE82400689F71 /* Power.swift in Sources */,
+				D22DD806272BE77C00689F71 /* SquadGenerator.swift in Sources */,
+				D22DD812272BFE7600689F71 /* City.swift in Sources */,
+				D22DD814272C004100689F71 /* Response.swift in Sources */,
+				D22DD80B272BEA1A00689F71 /* Name.swift in Sources */,
+				D22DD801272BE6EE00689F71 /* SquadMember.swift in Sources */,
+				D22DD80D272BEF4B00689F71 /* Nickname.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
