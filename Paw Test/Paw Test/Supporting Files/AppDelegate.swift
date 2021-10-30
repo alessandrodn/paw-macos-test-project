@@ -12,27 +12,34 @@ import Combine
 class AppDelegate: NSObject, NSApplicationDelegate {
   var cancellable: Cancellable?
   
-
-
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     // Insert code here to initialize your application
 
-    let testSquad = SquadGenerator.generateTestSquad()
-    print("Test Squad: \(testSquad)")
 
-    let networkService = NetworkService()
-    let publisher = networkService.createPublisherFor(testSquad)
-
-    cancellable = publisher?.sink { completion in
-      switch completion {
-      case .finished:
-        print("OK")
-      case .failure(let error):
-        print("Receiving data failed with: \(error.localizedDescription)")
-      }
-    } receiveValue: { receivedValue in
-      print("Received value: \(receivedValue)")
+    if let rootViewController = NSApp.windows.first?.contentViewController as? ViewController {
+      rootViewController.dataSource = RequestDataStore()
     }
+
+//    let testSquad = SquadGenerator.generateTestSquad()
+//    print("Test Squad: \(testSquad)")
+//
+//    let networkService = NetworkService()
+//    let publisher = networkService.createPublisherFor(testSquad)
+//
+//    cancellable = publisher?.sink { completion in
+//      switch completion {
+//      case .finished:
+//        print("OK")
+//      case .failure(let error):
+//        print("Receiving data failed with: \(error.localizedDescription)")
+//      }
+//    } receiveValue: { receivedValue in
+//      print("Received value: \(receivedValue)")
+//    }
+//
+//    let dataStore = RequestDataStore()
+//    dataStore.generateNewRequest {
+//    }
   }
 
   func applicationWillTerminate(_ aNotification: Notification) {
