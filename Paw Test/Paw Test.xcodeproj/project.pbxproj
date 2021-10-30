@@ -123,12 +123,9 @@
 				D22DD807272BE80C00689F71 /* TestData */,
 				D22DD7FF272BE6D900689F71 /* Model */,
 				D22DD815272C019A00689F71 /* Network */,
-				D22DD7D0272BE59500689F71 /* AppDelegate.swift */,
-				D22DD7D2272BE59500689F71 /* ViewController.swift */,
-				D22DD7D4272BE59600689F71 /* Assets.xcassets */,
-				D22DD7D6272BE59600689F71 /* Main.storyboard */,
+				D28CC3D4272CFB110042B610 /* Views */,
+				D28CC3D3272CFACA0042B610 /* Supporting Files */,
 				D22DD7D9272BE59600689F71 /* Info.plist */,
-				D22DD7DA272BE59600689F71 /* Paw_Test.entitlements */,
 			);
 			path = "Paw Test";
 			sourceTree = "<group>";
@@ -182,6 +179,25 @@
 				D2787B84272C027400A732FD /* NetworkService.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		D28CC3D3272CFACA0042B610 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D22DD7D0272BE59500689F71 /* AppDelegate.swift */,
+				D22DD7D4272BE59600689F71 /* Assets.xcassets */,
+				D22DD7DA272BE59600689F71 /* Paw_Test.entitlements */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D28CC3D4272CFB110042B610 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D22DD7D6272BE59600689F71 /* Main.storyboard */,
+				D22DD7D2272BE59500689F71 /* ViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
