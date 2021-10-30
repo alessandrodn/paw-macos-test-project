@@ -8,17 +8,17 @@
 import Foundation
 
 final class RequestDataStore {
-  private let networkService: SquadNetworkService
+  private let postSquadService: PostSquadService
 
   // TODO: Add basic persistency with UserDefaults
-  private var requests: [String: String] = [:]
+  private var requests: [String: TreeNode] = [:]
 
   // This protect from accessing requests from multiple thread
   // Can be removed by implementing RequestDataStore as actor
   private let queue: DispatchQueue = DispatchQueue(label: "DataModelQueue", qos: .background)
 
-  init(networkService: SquadNetworkService) {
-    self.networkService = networkService
+  init(postSquadService: PostSquadService) {
+    self.postSquadService = postSquadService
   }
 
   private func getCurrentDateTime() -> String {
@@ -32,37 +32,37 @@ final class RequestDataStore {
     return "Req. \(requestNumber) - \(squadName) - \(currentTime)"
   }
 
-  private func processResponse(_ responseData: String, for title: String) {
-    queue.sync {
-      requests[title] = responseData
-    }
+  private func processResult(_ result: PostSquadServiceResult, for title: String, completion: @escaping (Result<String, Error>) -> Void) {
+    switch result {
+    case .success(let tree):
+      queue.sync {
+        requests[title] = tree
+      }
 
+      completion(.success(title))
+
+    case .failure(let error):
+      completion(.failure(error))
+    }
   }
 }
 
 extension RequestDataStore: RequestDataSource {
-  func generateNewRequest(_ completion: @escaping (String) -> Void) {
+  func generateNewRequest(_ completion: @escaping (Result<String, Error>) -> Void) {
     let testSquad = SquadGenerator.generateTestSquad()
     let requestKey = createRequestKeyForSquad(testSquad)
 
-    networkService.postSquad(testSquad) { [weak self] result in
-      switch result {
-      case .success(let response):
-        self?.processResponse(response.data, for: requestKey)
-        completion(requestKey)
-      case .failure(let error):
-        // TODO: Transmit back to the view the error
-        print("Error")
-      }
+    postSquadService.postSquad(testSquad) { [weak self] result in
+      self?.processResult(result, for: requestKey, completion: completion)
     }
   }
 
-  func requestWithTitle(_ title: String) -> String? {
+  func requestWithTitle(_ title: String) -> TreeNode? {
     return requests[title]
   }
 
-  func getAll() -> [String] {
-    return Array(requests.values)
+  func getAllTitles() -> [String] {
+    return Array(requests.keys)
   }
 
   func removeAll() {

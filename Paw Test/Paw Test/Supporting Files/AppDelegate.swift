@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     if let rootViewController = NSApp.windows.first?.contentViewController as? ViewController {
-      rootViewController.dataSource = RequestDataStore(networkService: NetworkService())
+      rootViewController.dataSource = RequestDataStore(postSquadService: NetworkService())
     }
   }
 

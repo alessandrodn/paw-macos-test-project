@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 struct NetworkResponse: Codable {
   let data: String
@@ -16,12 +15,7 @@ enum NetworkServiceError: Error {
   case jsonEncodingError
   case networkError(errorMessage: String)
   case jsonDecodingError
-  case other(error: Error)
+  case other(errorMessage: String)
 }
 
 typealias NetworkServiceResult = Result<NetworkResponse, NetworkServiceError>
-
-protocol SquadNetworkService {
-  func postSquad(_ squad: Squad, _ completion: @escaping (NetworkServiceResult) -> Void)
-}
-

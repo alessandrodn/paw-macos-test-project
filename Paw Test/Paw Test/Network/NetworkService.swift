@@ -46,7 +46,7 @@ final class NetworkService {
     }
   }
 
-  private func request(endpoint: Endpoint, request: Encodable, _ completion: @escaping (NetworkServiceResult) -> Void) {
+  private func performUpload(of request: Encodable, to endpoint: Endpoint, completion: @escaping (NetworkServiceResult) -> Void) {
     guard let data = request.asJSONData else {
       completion(.failure(.jsonEncodingError))
       return
@@ -61,12 +61,10 @@ final class NetworkService {
       completion(self.computeResult(data: data, response: response, error: error))
     }.resume()
   }
-}
 
-extension NetworkService: SquadNetworkService {
-  func postSquad(_ squad: Squad, _ completion: @escaping (NetworkServiceResult) -> Void) {
+  func upload(request: Encodable, to endpoint: Endpoint, completion: @escaping (NetworkServiceResult) -> Void) {
     queue.async { [weak self] in
-      self?.request(endpoint: .anything, request: squad, completion)
+      self?.performUpload(of: request, to: endpoint, completion: completion)
     }
   }
 }

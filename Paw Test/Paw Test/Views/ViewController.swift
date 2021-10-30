@@ -8,9 +8,9 @@
 import Cocoa
 
 protocol RequestDataSource: AnyObject {
-  func generateNewRequest(_ completion: @escaping (String) -> Void)
-  func requestWithTitle(_ title: String) -> String?
-  func getAll() -> [String]
+  func generateNewRequest(_ completion: @escaping (Result<String, Error>) -> Void)
+  func requestWithTitle(_ title: String) -> TreeNode?
+  func getAllTitles() -> [String]
   func removeAll()
 }
 
@@ -21,25 +21,52 @@ class ViewController: NSViewController {
       guard let dataSource = dataSource else { return }
 
       requestsSelectPopUp.removeAllItems()
-      requestsSelectPopUp.addItems(withTitles: dataSource.getAll())
+      requestsSelectPopUp.addItems(withTitles: dataSource.getAllTitles())
       updateView()
     }
   }
 
   @IBOutlet private weak var requestsSelectPopUp: NSPopUpButton!
-  @IBOutlet private weak var scrollView: NSScrollView!
-  private var textView: NSTextView? { scrollView.documentView as? NSTextView }
+  @IBOutlet private weak var outlineView: NSOutlineView!
+
+  private lazy var treeController: NSTreeController = {
+    let treeController = NSTreeController()
+    treeController.objectClass = TreeNode.self
+    treeController.childrenKeyPath = "children"
+    treeController.countKeyPath = "count"
+    treeController.leafKeyPath = "isLeaf"
+
+    return treeController
+  }()
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    outlineView.delegate = self
+    outlineView.expandItem(nil, expandChildren: true)
+
+    bind()
+  }
+
+  private func bind() {
+    outlineView.bind(NSBindingName(rawValue: "content"),
+                     to: treeController,
+                     withKeyPath: "arrangedObjects",
+                     options: nil)
   }
 
   @IBAction func createNewRequestClicked(_ sender: NSButton) {
-    dataSource?.generateNewRequest { newTitle in
+    dataSource?.generateNewRequest { result in
       DispatchQueue.main.async { [weak self] in
-        self?.requestsSelectPopUp.addItem(withTitle: newTitle)
-        self?.requestsSelectPopUp.selectItem(withTitle: newTitle)
-        self?.updateView()
+        switch result {
+        case .success(let newTitle):
+          self?.requestsSelectPopUp.addItem(withTitle: newTitle)
+          self?.requestsSelectPopUp.selectItem(withTitle: newTitle)
+          self?.updateView()
+        case .failure(let error):
+          // TODO: Display error
+          print("Error: \(error.localizedDescription)")
+        }
       }
     }
   }
@@ -56,24 +83,39 @@ class ViewController: NSViewController {
 
   private func updateView() {
     guard requestsSelectPopUp.numberOfItems > 0 else {
-      textView?.string = ""
+      treeController.content = []
       return
     }
 
     guard let selectedItem = requestsSelectPopUp.titleOfSelectedItem,
-          let responseData = dataSource?.requestWithTitle(selectedItem) else { return }
+          let rootNode = dataSource?.requestWithTitle(selectedItem) else { return }
 
-    textView?.string = format(responseData: responseData)
-  }
-
-  // TODO: Remove this and display the JSON tree with a NSDocumentView
-  private func format(responseData: String) -> String {
-    let json = try! JSONDecoder().decode(Squad.self, from: responseData.data(using: .utf8) ?? Data())
-
-    let jsonEncoder = JSONEncoder()
-    jsonEncoder.outputFormatting = .prettyPrinted
-    let parsedString = try! jsonEncoder.encode(json)
-    return String(data: parsedString, encoding: .utf8)!
+    treeController.content = rootNode.children
+    outlineView.expandItem(nil, expandChildren: true)
   }
 }
 
+extension ViewController: NSOutlineViewDelegate {
+  func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
+    var cellView: NSTableCellView?
+
+    guard let cellIdentifier = tableColumn?.identifier else { return nil }
+
+    switch cellIdentifier {
+    case .init("key"):
+      if let view = outlineView.makeView(withIdentifier: cellIdentifier, owner: outlineView.delegate) as? NSTableCellView {
+        view.textField?.bind(.value, to: view, withKeyPath: "objectValue.title", options: nil)
+        cellView = view
+      }
+    case .init("value"):
+      if let view = outlineView.makeView(withIdentifier: cellIdentifier, owner: outlineView.delegate) as? NSTableCellView {
+        view.textField?.bind(.value, to: view, withKeyPath: "objectValue.countOrValue", options: nil)
+        cellView = view
+      }
+    default:
+      break
+    }
+
+    return cellView
+  }
+}
