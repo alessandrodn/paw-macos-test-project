@@ -8,60 +8,73 @@
 import Foundation
 import Combine
 
-final class NetworkService: NetworkServicePublisher {
+final class NetworkService {
   private let session: URLSession
+  private let queue: DispatchQueue = DispatchQueue(label: "NetworkQueue", qos: .background)
 
   init(session: URLSession = .shared) {
     self.session = session
   }
 
-  func createPublisherFor(_ model: Encodable) -> AnyPublisher<Response, NetworkServiceError>? {
-    guard let data = model.toJSONData(),
-          let request = setupRequest(for: .httpbin, with: data) else { return nil }
-
-    return session.dataTaskPublisher(for: request)
-      .map { $0.data }
-      .print()
-      .decode(type: Response.self, decoder: JSONDecoder())
-      .print()
-      .mapError({ error in
-        switch error {
-        case let urlError as URLError:
-          print("Network request to \(String(describing: urlError.failureURLString)) failed with: \(urlError.localizedDescription)")
-          return .networkError(error: urlError)
-        case is Swift.DecodingError:
-          print("JSON decoding failed with: \(error.localizedDescription)")
-          return .jsonDecodingError
-        default:
-          print("Unknown error: \(error.localizedDescription)")
-          return .other(error)
-        }
-      })
-      .eraseToAnyPublisher()
-  }
-
-  private func setupRequest(for endpoint: Endpoint, with data: Data) -> URLRequest? {
-    var urlComponents = URLComponents()
-    urlComponents.scheme = endpoint.scheme
-    urlComponents.host = endpoint.serverHost
-    urlComponents.path = endpoint.uri
-
-    guard let url = urlComponents.url else {
-      print("URL generation failed!")
-      return nil
-    }
-
-    var request = URLRequest(url: url)
+  private func createRequest(for endpoint: Endpoint, with data: Data) -> URLRequest? {
+    var request = URLRequest(url: endpoint.url)
     request.httpMethod = endpoint.httpMethod
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.httpBody = data
 
     return request
   }
+
+  private func computeResult(data: Data?, response: URLResponse?, error: Error?) -> NetworkServiceResult {
+    if let error = error {
+      return .failure(.networkError(errorMessage: error.localizedDescription))
+    }
+
+    guard let httpResponse = response as? HTTPURLResponse else {
+      return .failure(.networkError(errorMessage: "Invalid HTTP response"))
+    }
+
+    guard httpResponse.isOk else {
+      return .failure(.networkError(errorMessage: "Server returned response \(httpResponse.statusCode)"))
+    }
+
+    do {
+      let response = try JSONDecoder().decode(NetworkResponse.self, from: data ?? Data())
+      return .success(response)
+    } catch {
+      return .failure(.jsonDecodingError)
+    }
+  }
+
+  private func request(endpoint: Endpoint, request: Encodable, _ completion: @escaping (NetworkServiceResult) -> Void) {
+    guard let data = request.asJSONData else {
+      completion(.failure(.jsonEncodingError))
+      return
+    }
+
+    guard let urlRequest = createRequest(for: endpoint, with: data) else {
+      completion(.failure(.networkError(errorMessage: "Error creating URL request")))
+      return
+    }
+
+    session.dataTask(with: urlRequest) { data, response, error in
+      completion(self.computeResult(data: data, response: response, error: error))
+    }.resume()
+  }
+}
+
+extension NetworkService: SquadNetworkService {
+  func postSquad(_ squad: Squad, _ completion: @escaping (NetworkServiceResult) -> Void) {
+    queue.async { [weak self] in
+      self?.request(endpoint: .anything, request: squad, completion)
+    }
+  }
 }
 
 private extension Encodable {
-  func toJSONData() -> Data? {
-    return try? JSONEncoder().encode(self)
-  }
+  var asJSONData: Data? { try? JSONEncoder().encode(self) }
+}
+
+extension HTTPURLResponse {
+  var isOk: Bool { 200..<300 ~= statusCode }
 }

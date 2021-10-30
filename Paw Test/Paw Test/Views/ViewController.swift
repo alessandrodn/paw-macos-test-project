@@ -22,7 +22,7 @@ class ViewController: NSViewController {
 
       requestsSelectPopUp.removeAllItems()
       requestsSelectPopUp.addItems(withTitles: dataSource.getAll())
-      updateUI()
+      updateView()
     }
   }
 
@@ -39,7 +39,7 @@ class ViewController: NSViewController {
       DispatchQueue.main.async { [weak self] in
         self?.requestsSelectPopUp.addItem(withTitle: newTitle)
         self?.requestsSelectPopUp.selectItem(withTitle: newTitle)
-        self?.updateUI()
+        self?.updateView()
       }
     }
   }
@@ -47,23 +47,33 @@ class ViewController: NSViewController {
   @IBAction func deletePreviousRequestClicked(_ sender: NSButton) {
     dataSource?.removeAll()
     requestsSelectPopUp.removeAllItems()
-    updateUI()
+    updateView()
   }
 
   @IBAction func requestSelectDidChangeValue(_ sender: NSPopUpButton) {
-    updateUI()
+    updateView()
   }
 
-  private func updateUI() {
+  private func updateView() {
     guard requestsSelectPopUp.numberOfItems > 0 else {
       textView?.string = ""
       return
     }
 
     guard let selectedItem = requestsSelectPopUp.titleOfSelectedItem,
-          let selectedRequestData = dataSource?.requestWithTitle(selectedItem) else { return }
+          let responseData = dataSource?.requestWithTitle(selectedItem) else { return }
 
-    textView?.string = selectedRequestData
+    textView?.string = format(responseData: responseData)
+  }
+
+  // TODO: Remove this and display the JSON tree with a NSDocumentView
+  private func format(responseData: String) -> String {
+    let json = try! JSONDecoder().decode(Squad.self, from: responseData.data(using: .utf8) ?? Data())
+
+    let jsonEncoder = JSONEncoder()
+    jsonEncoder.outputFormatting = .prettyPrinted
+    let parsedString = try! jsonEncoder.encode(json)
+    return String(data: parsedString, encoding: .utf8)!
   }
 }
 

@@ -8,12 +8,20 @@
 import Foundation
 import Combine
 
-enum NetworkServiceError: Error {
-  case networkError(error: URLError)
-  case jsonDecodingError
-  case other(_ error: Error)
+struct NetworkResponse: Codable {
+  let data: String
 }
 
-protocol NetworkServicePublisher {
-  func createPublisherFor(_ model: Encodable) -> AnyPublisher<Response, NetworkServiceError>?
+enum NetworkServiceError: Error {
+  case jsonEncodingError
+  case networkError(errorMessage: String)
+  case jsonDecodingError
+  case other(error: Error)
 }
+
+typealias NetworkServiceResult = Result<NetworkResponse, NetworkServiceError>
+
+protocol SquadNetworkService {
+  func postSquad(_ squad: Squad, _ completion: @escaping (NetworkServiceResult) -> Void)
+}
+
